@@ -12,7 +12,7 @@ var testConfig = Config{
 	Hostname: "testhost.com",
 }
 
-func TestPayload(t *testing.T) {
+func TestPayloadJSONMarshaling(t *testing.T) {
 	logLine1 := logLineJSON{
 		Timestamp: 1469047048,
 		Line:      "Test line 1",
@@ -38,7 +38,7 @@ func TestPayload(t *testing.T) {
 	t.Logf("PayloadJSON as JSON string: %s", jsonPayload)
 }
 
-func TestClientLog(t *testing.T) {
+func TestClient_Log(t *testing.T) {
 	client := NewClient(testConfig)
 
 	logMsg := "Test log message"
@@ -49,7 +49,7 @@ func TestClientLog(t *testing.T) {
 	}
 }
 
-func TestSize(t *testing.T) {
+func TestClient_Size(t *testing.T) {
 	client := NewClient(testConfig)
 
 	logMsg := "Test log message"
