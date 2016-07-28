@@ -1,8 +1,10 @@
 package logdna
 
-import "encoding/json"
-import "testing"
-import "time"
+import (
+	"encoding/json"
+	"testing"
+	"time"
+)
 
 var testConfig = Config{
 	APIKey:   "secret",
