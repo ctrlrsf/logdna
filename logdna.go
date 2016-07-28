@@ -58,7 +58,7 @@ func NewClient(cfg Config) *Client {
 		cfg.FlushLimit = DefaultFlushLimit
 	}
 
-	client := Client{}
+	var client Client
 	client.apiURL = makeIngestURL(cfg)
 
 	client.config = cfg
