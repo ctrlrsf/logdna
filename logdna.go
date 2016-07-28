@@ -21,7 +21,7 @@ type Config struct {
 	FlushLimit int
 }
 
-// A Client is a client to the LogDNA logging service.
+// Client is a client to the LogDNA logging service.
 type Client struct {
 	config  Config
 	payload PayloadJSON
