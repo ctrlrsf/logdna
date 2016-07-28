@@ -32,7 +32,7 @@ func TestPayload(t *testing.T) {
 	t.Logf("PayloadJSON value: %+v", payload)
 	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
-		t.Errorf("unable marshal payload to JSON: %v", err)
+		t.Fatalf("unable marshal payload to JSON: %v", err)
 	}
 
 	t.Logf("PayloadJSON as JSON string: %s", jsonPayload)
