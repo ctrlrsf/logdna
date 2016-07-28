@@ -115,6 +115,6 @@ func (c *Client) Flush() error {
 }
 
 // Close closes the client. It also sends any buffered logs.
-func (c *Client) Close() {
-	c.Flush()
+func (c *Client) Close() error {
+	return c.Flush()
 }
