@@ -24,21 +24,21 @@ type Config struct {
 // Client is a client to the LogDNA logging service.
 type Client struct {
 	config  Config
-	payload PayloadJSON
+	payload payloadJSON
 	apiURL  url.URL
 }
 
-// LogLineJSON represents a log line in the LogDNA ingest API JSON payload.
-type LogLineJSON struct {
+// logLineJSON represents a log line in the LogDNA ingest API JSON payload.
+type logLineJSON struct {
 	Timestamp int64  `json:"timestamp"`
 	Line      string `json:"line"`
 	File      string `json:"file"`
 }
 
-// PayloadJSON is the complete JSON payload that will be sent to the LogDNA
+// payloadJSON is the complete JSON payload that will be sent to the LogDNA
 // ingest API.
-type PayloadJSON struct {
-	Lines []LogLineJSON `json:"lines"`
+type payloadJSON struct {
+	Lines []logLineJSON `json:"lines"`
 }
 
 // makeIngestURL creats a new URL to the a full LogDNA ingest API endpoint with
@@ -76,7 +76,7 @@ func (c *Client) Log(t time.Time, msg string) {
 		c.Flush()
 	}
 
-	logLine := LogLineJSON{
+	logLine := logLineJSON{
 		Timestamp: t.UnixNano(),
 		Line:      msg,
 		File:      c.config.LogFile,
@@ -106,7 +106,7 @@ func (c *Client) Flush() error {
 	_, err = http.Post(c.apiURL.String(), "application/json", jsonBuffer)
 
 	if err == nil {
-		c.payload = PayloadJSON{}
+		c.payload = payloadJSON{}
 	}
 
 	return err

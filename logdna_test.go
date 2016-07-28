@@ -11,20 +11,20 @@ var testConfig = Config{
 }
 
 func TestPayload(t *testing.T) {
-	logLine1 := LogLineJSON{
+	logLine1 := logLineJSON{
 		Timestamp: 1469047048,
 		Line:      "Test line 1",
 		File:      "test.log",
 	}
-	logLine2 := LogLineJSON{
+	logLine2 := logLineJSON{
 		Timestamp: 1469146012,
 		Line:      "Test line 2",
 		File:      "test.log",
 	}
 
-	logLines := []LogLineJSON{logLine1, logLine2}
+	logLines := []logLineJSON{logLine1, logLine2}
 
-	payload := PayloadJSON{
+	payload := payloadJSON{
 		Lines: logLines,
 	}
 	t.Logf("PayloadJSON value: %+v", payload)
