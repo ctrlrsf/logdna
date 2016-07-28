@@ -2,9 +2,9 @@ package logdna
 
 import "bytes"
 import "encoding/json"
-import "fmt"
 import "net/http"
 import "net/url"
+import "strconv"
 import "time"
 
 // IngestBaseURL is the base URL for the LogDNA ingest API.
@@ -47,7 +47,10 @@ func makeIngestURL(cfg Config) url.URL {
 	u, _ := url.Parse(IngestBaseURL)
 
 	u.User = url.User(cfg.APIKey)
-	u.RawQuery = fmt.Sprintf("hostname=%s&now=%d", cfg.Hostname, time.Time{}.UnixNano())
+	values := url.Values{}
+	values.Set("hostname", cfg.Hostname)
+	values.Set("now", strconv.FormatInt(time.Time{}.UnixNano(), 10))
+	u.RawQuery = values.Encode()
 
 	return *u
 }
