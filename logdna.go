@@ -7,13 +7,13 @@ import "net/http"
 import "net/url"
 import "time"
 
-// IngestBaseURL is the base URL for the LogDNA ingest API
+// IngestBaseURL is the base URL for the LogDNA ingest API.
 const IngestBaseURL = "https://logs.logdna.com/logs/ingest"
 
 // DefaultFlushLimit is the number of log lines before we flush to LogDNA
 const DefaultFlushLimit = 5000
 
-// Config is used by NewClient to configure new clients
+// Config is used by NewClient to configure new clients.
 type Config struct {
 	APIKey     string
 	LogFile    string
@@ -28,21 +28,21 @@ type Client struct {
 	apiURL  url.URL
 }
 
-// LogLineJSON represents a log line in the LogDNA ingest API JSON payload
+// LogLineJSON represents a log line in the LogDNA ingest API JSON payload.
 type LogLineJSON struct {
 	Timestamp int64  `json:"timestamp"`
 	Line      string `json:"line"`
 	File      string `json:"file"`
 }
 
-// PayloadJSON is the complete JSON payload that will be sent to LogDNA
-// inguest API
+// PayloadJSON is the complete JSON payload that will be sent to the LogDNA
+// ingest API.
 type PayloadJSON struct {
 	Lines []LogLineJSON `json:"lines"`
 }
 
-// makeIngestURL creats a new URL to the a full LogDNA ingest
-// API endpoint with API key and requierd parameters
+// makeIngestURL creats a new URL to the a full LogDNA ingest API endpoint with
+// API key and requierd parameters.
 func makeIngestURL(cfg Config) url.URL {
 	u, _ := url.Parse(IngestBaseURL)
 
@@ -52,8 +52,7 @@ func makeIngestURL(cfg Config) url.URL {
 	return *u
 }
 
-// NewClient returns a Client configured to send logs to the LogDNA
-// ingest API.
+// NewClient returns a Client configured to send logs to the LogDNA ingest API.
 func NewClient(cfg Config) *Client {
 	if cfg.FlushLimit == 0 {
 		cfg.FlushLimit = DefaultFlushLimit
@@ -71,8 +70,7 @@ func NewClient(cfg Config) *Client {
 //
 // To actually send the logs, Flush() needs to be called.
 //
-// Flush is called automatically if we reach the client's
-// flush limit.
+// Flush is called automatically if we reach the client's flush limit.
 func (c *Client) Log(t time.Time, msg string) {
 	if c.Size() == c.config.FlushLimit {
 		c.Flush()
@@ -86,13 +84,12 @@ func (c *Client) Log(t time.Time, msg string) {
 	c.payload.Lines = append(c.payload.Lines, logLine)
 }
 
-// Size returns the number of lines waiting to be sent
+// Size returns the number of lines waiting to be sent.
 func (c *Client) Size() int {
 	return len(c.payload.Lines)
 }
 
-// Flush sends any buffered logs to LogDNA and clears the buffered
-// logs.
+// Flush sends any buffered logs to LogDNA and clears the buffered logs.
 func (c *Client) Flush() error {
 	// Return immediately if no logs to send
 	if c.Size() == 0 {
