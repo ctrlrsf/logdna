@@ -43,5 +43,12 @@ func main() {
 	for scanner.Scan() {
 		client.Log(time.Time{}, scanner.Text())
 	}
+
+	if scanner.Err() != nil {
+		fmt.Fprintln(os.Stderr, "Error reading from stdin: %v", scanner.Err())
+		client.Flush()
+		os.Exit(1)
+	}
+
 	client.Flush()
 }
