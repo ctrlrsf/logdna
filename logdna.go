@@ -105,9 +105,11 @@ func (c *Client) Flush() error {
 
 	_, err = http.Post(c.apiURL.String(), "application/json", jsonReader)
 
-	if err == nil {
-		c.payload = payloadJSON{}
+	if err != nil {
+		return err
 	}
+
+	c.payload = payloadJSON{}
 
 	return err
 }
