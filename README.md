@@ -1,4 +1,4 @@
-# go-logdna
+# logdna
 
 A go library for sending logs to LogDNA via their ingest API.
 
@@ -7,12 +7,12 @@ It works but is still under development and subject to change.
 ## Installing
 
 ```
-go get github.com/ctrlrsf/go-logdna/...
+go get github.com/ctrlrsf/logdna/...
 ```
 
 ## Using library
 
-Godoc available at [https://godoc.org/github.com/ctrlrsf/go-logdna]()
+Godoc available at [https://godoc.org/github.com/ctrlrsf/logdna]()
 
 See source code of `logdna-stdin` command in this repo for an example.
 

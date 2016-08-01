@@ -5,7 +5,7 @@ import "flag"
 import "fmt"
 import "os"
 import "time"
-import "github.com/ctrlrsf/go-logdna"
+import "github.com/ctrlrsf/logdna"
 
 func main() {
 	apiKey := os.Getenv("LOGDNA_API_KEY")
