@@ -79,8 +79,10 @@ func (c *Client) Log(t time.Time, msg string) {
 		c.Flush()
 	}
 
+	// Ingest API wants timestamp in milliseconds so we need to round timestamp
+	// down from nanoseconds.
 	logLine := logLineJSON{
-		Timestamp: t.UnixNano(),
+		Timestamp: t.UnixNano() / 1000000,
 		Line:      msg,
 		File:      c.config.LogFile,
 	}
