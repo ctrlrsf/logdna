@@ -109,11 +109,12 @@ func (c *Client) Flush() error {
 	jsonReader := bytes.NewReader(jsonPayload)
 
 	resp, err := http.Post(c.apiURL.String(), "application/json", jsonReader)
-	defer resp.Body.Close()
 
 	if err != nil {
 		return err
 	}
+
+	defer resp.Body.Close()
 
 	c.payload = payloadJSON{}
 
