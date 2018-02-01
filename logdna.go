@@ -87,7 +87,10 @@ func (c *Client) Log(t time.Time, msg string) {
 		Line:      msg,
 		File:      c.config.LogFile,
 	}
+
+	c.flushLock.Lock()
 	c.payload.Lines = append(c.payload.Lines, logLine)
+	c.flushLock.Unlock()
 
 	if c.Size() >= c.config.FlushLimit {
 		c.Flush()
