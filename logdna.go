@@ -1,11 +1,14 @@
 package logdna
 
-import "bytes"
-import "encoding/json"
-import "net/http"
-import "net/url"
-import "strconv"
-import "time"
+import (
+	"bytes"
+	"encoding/json"
+	"net/http"
+	"net/url"
+	"strconv"
+	"sync"
+	"time"
+)
 
 // IngestBaseURL is the base URL for the LogDNA ingest API.
 const IngestBaseURL = "https://logs.logdna.com/logs/ingest"
@@ -23,9 +26,10 @@ type Config struct {
 
 // Client is a client to the LogDNA logging service.
 type Client struct {
-	config  Config
-	payload payloadJSON
-	apiURL  url.URL
+	config    Config
+	payload   payloadJSON
+	apiURL    url.URL
+	flushLock *sync.Mutex
 }
 
 // logLineJSON represents a log line in the LogDNA ingest API JSON payload.
@@ -65,6 +69,7 @@ func NewClient(cfg Config) *Client {
 	client.apiURL = makeIngestURL(cfg)
 
 	client.config = cfg
+	client.flushLock = &sync.Mutex{}
 
 	return &client
 }
@@ -75,10 +80,6 @@ func NewClient(cfg Config) *Client {
 //
 // Flush is called automatically if we reach the client's flush limit.
 func (c *Client) Log(t time.Time, msg string) {
-	if c.Size() == c.config.FlushLimit {
-		c.Flush()
-	}
-
 	// Ingest API wants timestamp in milliseconds so we need to round timestamp
 	// down from nanoseconds.
 	logLine := logLineJSON{
@@ -86,7 +87,14 @@ func (c *Client) Log(t time.Time, msg string) {
 		Line:      msg,
 		File:      c.config.LogFile,
 	}
+
+	c.flushLock.Lock()
 	c.payload.Lines = append(c.payload.Lines, logLine)
+	c.flushLock.Unlock()
+
+	if c.Size() >= c.config.FlushLimit {
+		c.Flush()
+	}
 }
 
 // Size returns the number of lines waiting to be sent.
@@ -100,6 +108,10 @@ func (c *Client) Flush() error {
 	if c.Size() == 0 {
 		return nil
 	}
+
+	//prevent concurrent Flush()es from stepping on one another
+	c.flushLock.Lock()
+	defer c.flushLock.Unlock()
 
 	jsonPayload, err := json.Marshal(c.payload)
 	if err != nil {
