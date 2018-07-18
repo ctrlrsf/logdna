@@ -8,7 +8,6 @@ import (
 
 var testConfig = Config{
 	APIKey:   "secret",
-	LogFile:  "test1.log",
 	Hostname: "testhost.com",
 }
 
@@ -16,12 +15,10 @@ func TestPayloadJSONMarshaling(t *testing.T) {
 	logLine1 := logLineJSON{
 		Timestamp: 1469047048,
 		Line:      "Test line 1",
-		File:      "test.log",
 	}
 	logLine2 := logLineJSON{
 		Timestamp: 1469146012,
 		Line:      "Test line 2",
-		File:      "test.log",
 	}
 
 	logLines := []logLineJSON{logLine1, logLine2}
@@ -39,7 +36,10 @@ func TestPayloadJSONMarshaling(t *testing.T) {
 }
 
 func TestClient_Log(t *testing.T) {
-	client := NewClient(testConfig)
+	client, err := NewClient(testConfig)
+	if err != nil {
+		t.Fatalf("error creating new client: %v", err)
+	}
 
 	logMsg := "Test log message"
 	client.Log(time.Time{}, logMsg)
@@ -50,7 +50,10 @@ func TestClient_Log(t *testing.T) {
 }
 
 func TestClient_Size(t *testing.T) {
-	client := NewClient(testConfig)
+	client, err := NewClient(testConfig)
+	if err != nil {
+		t.Fatalf("error creating new client: %v", err)
+	}
 
 	logMsg := "Test log message"
 	client.Log(time.Time{}, logMsg)
