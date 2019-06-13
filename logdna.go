@@ -16,7 +16,7 @@ const DefaultFlushLimit = 5000
 // Config is used by NewClient to configure new clients.
 type Config struct {
 	APIKey     string
-	LogFile    string
+	AppName    string
 	Hostname   string
 	FlushLimit int
 }
@@ -32,7 +32,7 @@ type Client struct {
 type logLineJSON struct {
 	Timestamp int64  `json:"timestamp"`
 	Line      string `json:"line"`
-	File      string `json:"file"`
+	AppName   string `json:"app"`
 	Level     string `json:"level"`
 }
 
@@ -85,7 +85,7 @@ func (c *Client) Log(t time.Time, msg string, level string) {
 	logLine := logLineJSON{
 		Timestamp: t.UnixNano() / 1000000,
 		Line:      msg,
-		File:      c.config.LogFile,
+		AppName:   c.config.AppName,
 		Level:     level,
 	}
 	c.payload.Lines = append(c.payload.Lines, logLine)

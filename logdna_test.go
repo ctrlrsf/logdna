@@ -8,7 +8,7 @@ import (
 
 var testConfig = Config{
 	APIKey:   "secret",
-	LogFile:  "test1.log",
+	AppName:  "test1",
 	Hostname: "testhost.com",
 }
 
@@ -16,13 +16,13 @@ func TestPayloadJSONMarshaling(t *testing.T) {
 	logLine1 := logLineJSON{
 		Timestamp: 1469047048,
 		Line:      "Test line 1",
-		File:      "test.log",
+		AppName:   "test",
 		Level:     "Warning",
 	}
 	logLine2 := logLineJSON{
 		Timestamp: 1469146012,
 		Line:      "Test line 2",
-		File:      "test.log",
+		AppName:   "test",
 		Level:     "Info",
 	}
 
