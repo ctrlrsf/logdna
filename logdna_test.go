@@ -17,11 +17,13 @@ func TestPayloadJSONMarshaling(t *testing.T) {
 		Timestamp: 1469047048,
 		Line:      "Test line 1",
 		File:      "test.log",
+		Level:     "Warning",
 	}
 	logLine2 := logLineJSON{
 		Timestamp: 1469146012,
 		Line:      "Test line 2",
 		File:      "test.log",
+		Level:     "Info",
 	}
 
 	logLines := []logLineJSON{logLine1, logLine2}
