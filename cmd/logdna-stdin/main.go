@@ -16,7 +16,7 @@ func main() {
 	}
 
 	hostname := flag.String("hostname", "", "hostname you want logs to appear from in LogDNA viewer")
-	logFileName := flag.String("log-file-name", "", "log file or app name you want logs to appear as in LogDNA viewer")
+	appName := flag.String("app-name", "", "log file or app name you want logs to appear as in LogDNA viewer")
 
 	flag.Parse()
 
@@ -26,8 +26,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	if *logFileName == "" {
-		fmt.Println("Error: log-file-name flag is required")
+	if *appName == "" {
+		fmt.Println("Error:app-name flag is required")
 		flag.Usage()
 		os.Exit(1)
 	}
@@ -35,7 +35,7 @@ func main() {
 	cfg := logdna.Config{}
 	cfg.APIKey = apiKey
 	cfg.Hostname = *hostname
-	cfg.LogFile = *logFileName
+	cfg.AppName = *appName
 
 	client := logdna.NewClient(cfg)
 
