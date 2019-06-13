@@ -33,6 +33,7 @@ type logLineJSON struct {
 	Timestamp int64  `json:"timestamp"`
 	Line      string `json:"line"`
 	File      string `json:"file"`
+	Level     string `json:"level"`
 }
 
 // payloadJSON is the complete JSON payload that will be sent to the LogDNA
@@ -74,7 +75,7 @@ func NewClient(cfg Config) *Client {
 // To actually send the logs, Flush() needs to be called.
 //
 // Flush is called automatically if we reach the client's flush limit.
-func (c *Client) Log(t time.Time, msg string) {
+func (c *Client) Log(t time.Time, msg string, level string) {
 	if c.Size() == c.config.FlushLimit {
 		c.Flush()
 	}
@@ -85,6 +86,7 @@ func (c *Client) Log(t time.Time, msg string) {
 		Timestamp: t.UnixNano() / 1000000,
 		Line:      msg,
 		File:      c.config.LogFile,
+		Level:     level,
 	}
 	c.payload.Lines = append(c.payload.Lines, logLine)
 }

@@ -41,11 +41,11 @@ func main() {
 
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
-		client.Log(time.Time{}, scanner.Text())
+		client.Log(time.Time{}, scanner.Text(), "Info")
 	}
 
 	if scanner.Err() != nil {
-		fmt.Fprintln(os.Stderr, "Error reading from stdin: %v", scanner.Err())
+		fmt.Printf("Error reading from stdin: %v", scanner.Err())
 		client.Flush()
 		os.Exit(1)
 	}

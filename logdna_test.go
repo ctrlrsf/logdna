@@ -42,7 +42,7 @@ func TestClient_Log(t *testing.T) {
 	client := NewClient(testConfig)
 
 	logMsg := "Test log message"
-	client.Log(time.Time{}, logMsg)
+	client.Log(time.Time{}, logMsg, "Info")
 
 	if client.payload.Lines[0].Line != logMsg {
 		t.Fatalf("did not add expected log line")
@@ -53,7 +53,7 @@ func TestClient_Size(t *testing.T) {
 	client := NewClient(testConfig)
 
 	logMsg := "Test log message"
-	client.Log(time.Time{}, logMsg)
+	client.Log(time.Time{}, logMsg, "Info")
 
 	if client.Size() != 1 {
 		t.Fatalf("size is wrong: expected 1 got %d", client.Size())
