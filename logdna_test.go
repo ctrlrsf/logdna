@@ -8,7 +8,7 @@ import (
 
 var testConfig = Config{
 	APIKey:   "secret",
-	LogFile:  "test1.log",
+	AppName:  "test1",
 	Hostname: "testhost.com",
 }
 
@@ -16,12 +16,14 @@ func TestPayloadJSONMarshaling(t *testing.T) {
 	logLine1 := logLineJSON{
 		Timestamp: 1469047048,
 		Line:      "Test line 1",
-		File:      "test.log",
+		AppName:   "test",
+		Level:     "Warning",
 	}
 	logLine2 := logLineJSON{
 		Timestamp: 1469146012,
 		Line:      "Test line 2",
-		File:      "test.log",
+		AppName:   "test",
+		Level:     "Info",
 	}
 
 	logLines := []logLineJSON{logLine1, logLine2}
@@ -42,7 +44,7 @@ func TestClient_Log(t *testing.T) {
 	client := NewClient(testConfig)
 
 	logMsg := "Test log message"
-	client.Log(time.Time{}, logMsg)
+	client.Log(time.Time{}, logMsg, "Info")
 
 	if client.payload.Lines[0].Line != logMsg {
 		t.Fatalf("did not add expected log line")
@@ -53,7 +55,7 @@ func TestClient_Size(t *testing.T) {
 	client := NewClient(testConfig)
 
 	logMsg := "Test log message"
-	client.Log(time.Time{}, logMsg)
+	client.Log(time.Time{}, logMsg, "Info")
 
 	if client.Size() != 1 {
 		t.Fatalf("size is wrong: expected 1 got %d", client.Size())

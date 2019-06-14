@@ -16,7 +16,7 @@ const DefaultFlushLimit = 5000
 // Config is used by NewClient to configure new clients.
 type Config struct {
 	APIKey     string
-	LogFile    string
+	AppName    string
 	Hostname   string
 	FlushLimit int
 }
@@ -32,7 +32,8 @@ type Client struct {
 type logLineJSON struct {
 	Timestamp int64  `json:"timestamp"`
 	Line      string `json:"line"`
-	File      string `json:"file"`
+	AppName   string `json:"app"`
+	Level     string `json:"level"`
 }
 
 // payloadJSON is the complete JSON payload that will be sent to the LogDNA
@@ -74,7 +75,7 @@ func NewClient(cfg Config) *Client {
 // To actually send the logs, Flush() needs to be called.
 //
 // Flush is called automatically if we reach the client's flush limit.
-func (c *Client) Log(t time.Time, msg string) {
+func (c *Client) Log(t time.Time, msg string, level string) {
 	if c.Size() == c.config.FlushLimit {
 		c.Flush()
 	}
@@ -84,7 +85,8 @@ func (c *Client) Log(t time.Time, msg string) {
 	logLine := logLineJSON{
 		Timestamp: t.UnixNano() / 1000000,
 		Line:      msg,
-		File:      c.config.LogFile,
+		AppName:   c.config.AppName,
+		Level:     level,
 	}
 	c.payload.Lines = append(c.payload.Lines, logLine)
 }
